@@ -32,10 +32,17 @@ serve(async (req) => {
       .from('payments')
       .select('*')
       .eq('checkout_request_id', checkoutRequestID)
-      .single();
+      .maybeSingle();
 
     if (dbError) {
       console.error('Database query error:', dbError);
+      return new Response(
+        JSON.stringify({ success: false, error: 'Database error occurred' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!data) {
       return new Response(
         JSON.stringify({ success: false, error: 'Payment record not found' }),
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
