@@ -80,11 +80,12 @@ serve(async (req) => {
     console.log('Calling Lipana API with:', { phone: formattedPhone, amount, bundleName });
 
     // Call Lipana STK Push API
+    // Using x-api-key header as per Lipana documentation
     const response = await fetch('https://api.lipana.dev/v1/transactions/push-stk', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'x-api-key': apiKey,
       },
       body: JSON.stringify({
         phone: formattedPhone,
