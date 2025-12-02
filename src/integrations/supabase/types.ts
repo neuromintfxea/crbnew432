@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      payments: {
+        Row: {
+          amount: number
+          bundle_name: string
+          checkout_request_id: string | null
+          created_at: string
+          id: string
+          mpesa_receipt_number: string | null
+          phone: string
+          result_code: string | null
+          result_desc: string | null
+          status: string
+          transaction_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          bundle_name: string
+          checkout_request_id?: string | null
+          created_at?: string
+          id?: string
+          mpesa_receipt_number?: string | null
+          phone: string
+          result_code?: string | null
+          result_desc?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          bundle_name?: string
+          checkout_request_id?: string | null
+          created_at?: string
+          id?: string
+          mpesa_receipt_number?: string | null
+          phone?: string
+          result_code?: string | null
+          result_desc?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -48,7 +49,7 @@ serve(async (req) => {
 
     if (!isValidKenyanPhone(phone)) {
       return new Response(
-        JSON.stringify({ success: false, error: 'Invalid Kenyan phone number format' }),
+        JSON.stringify({ success: false, error: 'Invalid Kenyan phone number format. Use format: 07XXXXXXXX or 254XXXXXXXXX' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -66,20 +67,19 @@ serve(async (req) => {
     if (!apiKey) {
       console.error('LIPANA_API_KEY not configured');
       return new Response(
-        JSON.stringify({ success: false, error: 'Payment service not configured' }),
+        JSON.stringify({ success: false, error: 'Payment service not configured. Please contact support.' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Log API key format for debugging (masked)
-    console.log('API Key info:', {
-      length: apiKey.length,
-      prefix: apiKey.substring(0, 8) + '...',
-      hasSpaces: apiKey.includes(' '),
-    });
+    // Initialize Supabase client
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     console.log('Calling Lipana API with:', { phone: formattedPhone, amount, bundleName });
 
+    // Call Lipana STK Push API
     const response = await fetch('https://api.lipana.dev/v1/transactions/push-stk', {
       method: 'POST',
       headers: {
@@ -97,10 +97,29 @@ serve(async (req) => {
     console.log('Lipana API response:', data);
 
     if (!response.ok) {
+      console.error('Lipana API error:', data);
       return new Response(
-        JSON.stringify({ success: false, error: data.message || 'Payment initiation failed' }),
+        JSON.stringify({ 
+          success: false, 
+          error: data.message || data.error || 'Payment initiation failed. Please try again.' 
+        }),
         { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
+    }
+
+    // Store payment record in database
+    const { error: dbError } = await supabase.from('payments').insert({
+      phone: formattedPhone,
+      amount: Number(amount),
+      bundle_name: bundleName,
+      transaction_id: data.transactionId,
+      checkout_request_id: data.checkoutRequestID,
+      status: 'pending',
+    });
+
+    if (dbError) {
+      console.error('Database insert error:', dbError);
+      // Don't fail the request, payment was initiated successfully
     }
 
     return new Response(
@@ -108,7 +127,7 @@ serve(async (req) => {
         success: true,
         transactionId: data.transactionId,
         checkoutRequestID: data.checkoutRequestID,
-        message: 'STK push sent successfully',
+        message: 'STK push sent successfully. Please check your phone and enter your M-PESA PIN.',
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
