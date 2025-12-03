@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -5,11 +6,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Check, Crown, X } from "lucide-react";
 
+// Generate random price within range
+const getRandomPrice = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 interface PricingModalProps {
   isOpen: boolean;
   onClose: () => void;
   userData: { name: string; nationalId: string };
-  onSelectPlan: (plan: "standard" | "gold") => void;
+  onSelectPlan: (plan: "standard" | "gold", price: number) => void;
 }
 
 const standardFeatures = [
@@ -29,6 +35,16 @@ const goldFeatures = [
 ];
 
 export const PricingModal = ({ isOpen, onClose, userData, onSelectPlan }: PricingModalProps) => {
+  const [standardPrice, setStandardPrice] = useState(105);
+  const [goldPrice, setGoldPrice] = useState(156);
+
+  useEffect(() => {
+    if (isOpen) {
+      setStandardPrice(getRandomPrice(100, 110));
+      setGoldPrice(getRandomPrice(150, 170));
+    }
+  }, [isOpen]);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -57,7 +73,7 @@ export const PricingModal = ({ isOpen, onClose, userData, onSelectPlan }: Pricin
             </div>
             
             <div className="mb-6">
-              <span className="text-3xl font-bold text-foreground">KES 105</span>
+              <span className="text-3xl font-bold text-foreground">KES {standardPrice}</span>
               <span className="text-muted-foreground text-sm ml-2">One-time payment</span>
             </div>
 
@@ -73,7 +89,7 @@ export const PricingModal = ({ isOpen, onClose, userData, onSelectPlan }: Pricin
             <Button 
               variant="hero" 
               className="w-full"
-              onClick={() => onSelectPlan("standard")}
+              onClick={() => onSelectPlan("standard", standardPrice)}
             >
               Select Standard →
             </Button>
@@ -96,7 +112,7 @@ export const PricingModal = ({ isOpen, onClose, userData, onSelectPlan }: Pricin
             </div>
             
             <div className="mb-6">
-              <span className="text-3xl font-bold text-foreground">KES 156</span>
+              <span className="text-3xl font-bold text-foreground">KES {goldPrice}</span>
               <span className="text-muted-foreground text-sm ml-2">One-time payment</span>
             </div>
 
@@ -112,7 +128,7 @@ export const PricingModal = ({ isOpen, onClose, userData, onSelectPlan }: Pricin
             <Button 
               variant="hero" 
               className="w-full"
-              onClick={() => onSelectPlan("gold")}
+              onClick={() => onSelectPlan("gold", goldPrice)}
             >
               Select Gold Premium →
             </Button>

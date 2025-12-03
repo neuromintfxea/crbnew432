@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   {
@@ -25,8 +26,10 @@ const steps = [
 ];
 
 export const HowItWorks = () => {
+  const navigate = useNavigate();
+
   return (
-    <section className="py-20 bg-background">
+    <section id="faq" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -64,7 +67,7 @@ export const HowItWorks = () => {
 
         {/* CTA Button */}
         <div className="text-center mt-12">
-          <Button variant="hero" size="lg">
+          <Button variant="hero" size="lg" onClick={() => navigate("/auth")}>
             Start Your Journey
             <ArrowRight className="w-5 h-5" />
           </Button>

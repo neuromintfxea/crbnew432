@@ -31,6 +31,7 @@ export const ReportPurpose = () => {
   const [showPricing, setShowPricing] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<"standard" | "gold">("standard");
+  const [selectedPrice, setSelectedPrice] = useState(105);
   const [userData, setUserData] = useState({ name: "USER", nationalId: "00000000" });
 
   useEffect(() => {
@@ -49,8 +50,9 @@ export const ReportPurpose = () => {
     }, 3000);
   };
 
-  const handleSelectPlan = (plan: "standard" | "gold") => {
+  const handleSelectPlan = (plan: "standard" | "gold", price: number) => {
     setSelectedPlan(plan);
+    setSelectedPrice(price);
     setShowPricing(false);
     setShowPayment(true);
   };
@@ -135,7 +137,7 @@ export const ReportPurpose = () => {
       <PaymentModal
         isOpen={showPayment}
         onClose={() => setShowPayment(false)}
-        amount={selectedPlan === "standard" ? 105 : 156}
+        amount={selectedPrice}
         onSubmit={handlePaymentComplete}
         bundleName={selectedPlan === "standard" ? "CRB Standard Report" : "CRB Gold Report"}
       />
