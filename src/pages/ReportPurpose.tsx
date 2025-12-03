@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ const purposes = [
 ];
 
 export const ReportPurpose = () => {
+  const navigate = useNavigate();
   const [selectedPurpose, setSelectedPurpose] = useState<string | null>(null);
   const [showProcessing, setShowProcessing] = useState(false);
   const [showPricing, setShowPricing] = useState(false);
@@ -55,8 +57,8 @@ export const ReportPurpose = () => {
 
   const handlePaymentComplete = () => {
     setShowPayment(false);
-    // Navigate to dashboard or show success
-    alert("Payment initiated! Check your phone for M-PESA prompt.");
+    // Navigate to credit score results page
+    navigate("/credit-score", { state: { plan: selectedPlan } });
   };
 
   return (
