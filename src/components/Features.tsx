@@ -1,4 +1,5 @@
 import { Shield, FileCheck, Wallet } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const features = [
   {
@@ -22,6 +23,8 @@ const features = [
 ];
 
 export const Features = () => {
+  const navigate = useNavigate();
+
   return (
     <section id="features" className="py-20 bg-secondary/30">
       <div className="container mx-auto px-4">
@@ -44,8 +47,9 @@ export const Features = () => {
           {features.map((feature, index) => (
             <div
               key={feature.title}
-              className="bg-card rounded-xl p-6 shadow-card border border-border hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group"
+              className="bg-card rounded-xl p-6 shadow-card border border-border hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group cursor-pointer"
               style={{ animationDelay: `${index * 0.1}s` }}
+              onClick={() => navigate("/auth")}
             >
               <div className={`w-14 h-14 rounded-xl ${feature.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
                 <feature.icon className="w-7 h-7 text-primary-foreground" />

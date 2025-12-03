@@ -31,7 +31,7 @@ export const Hero = () => {
                 Start Your Credit Check
                 <ArrowRight className="w-5 h-5" />
               </Button>
-              <Button variant="heroOutline" size="lg" onClick={() => navigate("#features")}>
+              <Button variant="heroOutline" size="lg" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
                 Discover Features
               </Button>
             </div>

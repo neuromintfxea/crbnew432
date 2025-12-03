@@ -76,11 +76,11 @@ export const Footer = () => {
                 Send us a message
               </a>
               <a
-                href="mailto:support@metropolcrb.co.ke"
+                href="mailto:support@metrocheckcrbchecker.co.ke"
                 className="flex items-center gap-3 px-4 py-2.5 bg-primary-foreground/10 hover:bg-primary-foreground/20 rounded-lg transition-colors text-sm"
               >
                 <Mail className="w-4 h-4 text-primary" />
-                support@metropolcrb.co.ke
+                support@metrocheckcrbchecker.co.ke
               </a>
             </div>
           </div>
