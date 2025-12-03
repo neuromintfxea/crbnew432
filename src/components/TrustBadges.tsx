@@ -1,7 +1,11 @@
-const banks = [
-  "KCB Bank", "Equity Bank", "Family Bank", "Co-op Bank", 
-  "Standard Chartered", "NCBA", "Absa Kenya", "I&M Bank",
-  "Ecobank", "National Bank", "Stanbic", "DTB"
+import kenyaMap1 from "@/assets/kenya-map-1.jpg";
+import kenyaMap2 from "@/assets/kenya-map-2.jpg";
+import kenyaMap3 from "@/assets/kenya-map-3.jpeg";
+
+const maps = [
+  { src: kenyaMap1, alt: "Kenya Map Infographic" },
+  { src: kenyaMap2, alt: "Kenya Map with People" },
+  { src: kenyaMap3, alt: "Kenya Population Map" },
 ];
 
 export const TrustBadges = () => {
@@ -12,12 +16,16 @@ export const TrustBadges = () => {
           Trusted by thousands of Kenyans and Lending Institutions.
         </p>
         <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10">
-          {banks.map((bank) => (
+          {maps.map((map, index) => (
             <div
-              key={bank}
-              className="px-4 py-2 bg-secondary/50 rounded-lg border border-border/50 text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors"
+              key={index}
+              className="w-40 h-32 md:w-48 md:h-36 rounded-xl overflow-hidden border border-border/50 hover:border-primary/30 transition-all hover:shadow-lg"
             >
-              {bank}
+              <img
+                src={map.src}
+                alt={map.alt}
+                className="w-full h-full object-cover"
+              />
             </div>
           ))}
         </div>
